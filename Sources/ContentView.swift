@@ -35,7 +35,6 @@ struct ContentView: View {
                 VStack(spacing: 0) {
                     header
                     card.padding(.top, -25)
-                    tipSection
                     footer
                 }
             }
@@ -245,39 +244,18 @@ struct ContentView: View {
         }
     }
 
-    // MARK: - 说明 / 页脚
-
-    private var tipSection: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("使用说明")
-                .font(.system(size: 12, weight: .bold))
-                .foregroundColor(Palette.textMain)
-            Text("1. 点「扫码识别」对着二维码拍，或用「相册选图」选一张二维码截图")
-            Text("2. 识别成功后自动填进输入框，再点「打开支付宝付款」")
-            Text("3. 付完切回本 App，支付结果本工具拿不到（没接支付宝 SDK）")
-
-            Text("注意")
-                .font(.system(size: 12, weight: .bold))
-                .foregroundColor(Palette.textMain)
-                .padding(.top, 8)
-            Text("· iPhone 上只能用正式环境：支付宝官方不提供 iOS 沙箱钱包")
-            Text("· 弹不出支付宝时，点「复制唤起链接」粘到 Safari 地址栏验证一下")
-        }
-        .font(.system(size: 12))
-        .foregroundColor(Palette.textSub)
-        .lineSpacing(4)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 20)
-        .padding(.top, 22)
-    }
+    // MARK: - 页脚
 
     private var footer: some View {
-        Text("超萌康🐷")
+        Text("本工具由超萌康🐷，开发制作请勿外泄")
             .font(.system(size: 12))
             .foregroundColor(Palette.textSub)
+            .multilineTextAlignment(.center)
+            .lineSpacing(3)
             .frame(maxWidth: .infinity)
-            .padding(.top, 26)
-            .padding(.bottom, 24)
+            .padding(.horizontal, 24)
+            .padding(.top, 30)
+            .padding(.bottom, 26)
     }
 
     private var toastLayer: some View {
