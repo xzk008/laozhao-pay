@@ -18,6 +18,13 @@ struct ContentView: View {
     private var ready: Bool { !trimmed.isEmpty }
     private var looksValid: Bool { trimmed.contains("app_id=") || trimmed.contains("sign=") }
 
+    /// 状态栏高度。渐变头要连它一起铺满，否则顶部会露出一条页面底色（看着像纯白）
+    private var topInset: CGFloat {
+        let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+        if let top = scene?.windows.first?.safeAreaInsets.top, top > 0 { return top }
+        return 47
+    }
+
     // MARK: - Body
 
     var body: some View {
@@ -32,6 +39,7 @@ struct ContentView: View {
                     footer
                 }
             }
+            .ignoresSafeArea(edges: .top)   // 让内容从屏幕最顶端开始，头部才能盖住状态栏
 
             toastLayer
         }
@@ -58,17 +66,18 @@ struct ContentView: View {
         }
     }
 
-    // MARK: - 头部
+    // MARK: - 头部（渐变铺满状态栏 + 弧形底）
 
     private var header: some View {
-        VStack(spacing: 0) {
+        let inset = topInset
+        return VStack(spacing: 0) {
             ZStack(alignment: .top) {
                 LinearGradient(
                     gradient: Gradient(colors: [Palette.brandDark, Palette.brand]),
                     startPoint: .top,
                     endPoint: .bottom
                 )
-                .frame(height: 143)
+                .frame(height: 143 + inset)
 
                 VStack(spacing: 18) {
                     Text("上海滩的那一站，老赵扬名又立万")
@@ -84,8 +93,9 @@ struct ContentView: View {
                         .padding(.vertical, 5)
                         .background(Capsule().fill(Color.white.opacity(0.2)))
                 }
-                .padding(.top, 34)
+                .padding(.top, inset + 34)
             }
+            .frame(height: 143 + inset)
 
             ArcShape()
                 .fill(Palette.brand)
