@@ -1,0 +1,44 @@
+name: LaozhaoPay
+options:
+  bundleIdPrefix: com.laozhao
+  deploymentTarget:
+    iOS: "15.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1"
+    ENABLE_BITCODE: "NO"
+
+targets:
+  LaozhaoPay:
+    type: application
+    platform: iOS
+    # 只把 Sources 收进编译；Info.plist 放在 Support/ 外面，
+    # 避免它同时被当成资源和 INFOPLIST_FILE 而报 "Multiple commands produce"
+    sources:
+      - path: Sources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.laozhao.pay
+        PRODUCT_NAME: LaozhaoPay
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        INFOPLIST_FILE: Support/Info.plist
+        GENERATE_INFOPLIST_FILE: "NO"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        # 云编译产出未签名包，签名交给 Sideloadly / 你自己的证书
+        CODE_SIGN_IDENTITY: ""
+        CODE_SIGNING_REQUIRED: "NO"
+        CODE_SIGNING_ALLOWED: "NO"
+
+schemes:
+  LaozhaoPay:
+    build:
+      targets:
+        LaozhaoPay: all
+    run:
+      config: Debug
+    archive:
+      config: Release

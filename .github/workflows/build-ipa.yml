@@ -1,0 +1,57 @@
+name: Build unsigned IPA
+
+# 触发方式：手动点「Run workflow」，或推代码到 main / master 分支
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    # GitHub 免费提供的 macOS 机器，自带 Xcode
+    runs-on: macos-14
+
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+
+      - name: 环境信息
+        run: |
+          xcodebuild -version
+          sw_vers
+
+      - name: 安装 XcodeGen
+        run: brew install xcodegen
+
+      - name: 生成 Xcode 工程
+        run: xcodegen generate
+
+      - name: 编译（不签名）
+        run: |
+          xcodebuild \
+            -project LaozhaoPay.xcodeproj \
+            -scheme LaozhaoPay \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_ENTITLEMENTS="" \
+            build
+
+      - name: 打包成 .ipa
+        run: |
+          APP="build/Build/Products/Release-iphoneos/LaozhaoPay.app"
+          ls -l "$APP"
+          mkdir -p Payload
+          cp -R "$APP" Payload/
+          zip -qr LaozhaoPay-unsigned.ipa Payload
+          ls -lh LaozhaoPay-unsigned.ipa
+
+      - name: 上传产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: LaozhaoPay-unsigned-ipa
+          path: LaozhaoPay-unsigned.ipa
+          retention-days: 30
