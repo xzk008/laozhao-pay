@@ -33,6 +33,10 @@
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 
 	<key>NSCameraUsageDescription</key>
 	<string>需要用相机扫描二维码，识别出支付订单串后唤起支付宝付款。</string>
